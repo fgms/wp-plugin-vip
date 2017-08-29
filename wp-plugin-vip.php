@@ -42,6 +42,7 @@ add_action( 'admin_notices', 'fgms_plugin_vip_admin_notice');
 
 
 add_action( 'wp_enqueue_scripts', function(){
+  /*
   if (is_plugin_active('wp-less/bootstrap.php') ){
 		wp_enqueue_style('wp-plugin-vip-style-less',plugin_dir_url( __FILE__ ) . 'assets/less/style.less');
 	}
@@ -50,7 +51,7 @@ add_action( 'wp_enqueue_scripts', function(){
 	}
 
   wp_enqueue_script('wp-plugin-vip-script',  plugin_dir_url( __FILE__ ) .'assets/js/script.js');
-
+*/
 }, 35);
 
 add_filter( 'wpmem_login_form', 'fg_wpmem_form', 10, 2 );
