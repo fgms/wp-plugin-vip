@@ -21,7 +21,7 @@ add_filter('fg_theme_master_twig_locations', function($timberLocationsArray){
   // gives plugin override
   $a[] = get_stylesheet_directory(). '/twig-templates/plugin';
   return array_merge($a,$timberLocationsArray);
-});
+},15);
 
 /*** filter for adding settings page source: piklist plugin ***/
 add_filter('piklist_admin_pages', function($pages){
