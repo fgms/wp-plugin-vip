@@ -16,10 +16,10 @@ require_once __DIR__ .'/shortcodes/vip-specials-active.php';
 /*** Filter for adding twig locations source: wp-theme-twig ***/
 add_filter('fg_theme_master_twig_locations', function($timberLocationsArray){
   $a = [];
-  // overrides theme and child theme (if not needs to change filter execution)
-  $a[] = __DIR__ .'/twig-templates';
   // gives plugin override
   $a[] = get_stylesheet_directory(). '/twig-templates/plugin';
+  // overrides theme and child theme (if not needs to change filter execution)
+  $a[] = __DIR__ .'/twig-templates';
   return array_merge($a,$timberLocationsArray);
 },15);
 
