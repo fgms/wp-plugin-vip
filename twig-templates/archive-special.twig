@@ -1,0 +1,91 @@
+{% extends 'base.twig' %}
+{% block content %}
+
+{% set content %}
+{% filter shortcodes %}
+<h1 class="archive-title">{{archive_title | default('Specials')}}</h1>
+
+<div style="margin-bottom: 46px;" class="highlight-text">
+  <p class="intro-text">Take advantage of the limited time offers available below from Villa del Mar.</p>
+  [wpmem_logged_out]
+  [specials_active  singular="there is <strong>%d additional special offer</strong>"
+                    plural="there are <strong>%d additional special offers</strong>"
+                    zero ="<p>In addition to the special offers below, VIP Club members get exclusive or early access to additional offers, packages and unique VIP benefits. <a href='{{function('get_permalink',2621)}}'>Login</a> as a VIP Club member to view. Not a member yet? <a href='{{function('get_permalink',3396)}}' >Sign up today</a>. It's free!</p>" ]
+  <p>VIP Club Members: %s  available.  <a href="{{function('get_permalink',2621)}}">Login</a> to view.
+  Not a member yet? <a href="{{function('get_permalink',3396)}}">Sign up today</a>.  It's free!</p>
+  [/specials_active]
+[/wpmem_logged_out]
+</div>
+<div class="row">
+	<div class="[wpmem_logged_in]col-sm-8 col-md-9[/wpmem_logged_in]">
+		<ul id="specials-vip" >
+		{% for article in function('get_fg_post_type','special',100, 'menu_order','ASC') %}
+		  {% if  article.get_field('_wpmem_block') != 1 or function('is_user_logged_in') %}
+		  {# **************** setting up variables #}
+		  	{% set title %}{% if article.get_field('_wpmem_block') == 1 %}<div style="text-transform:uppercase;font-size:1.2em;line-height:1.1em;color: #f74a4a;padding-bottom: 6px;">VIP Club Exclusive</div>{% endif %}<a href="{{ article.link }}" title="{{ article.title | escape }}" itemprop="url"><h2 class="article-title hidden-xs" itemscope="name">{{article.title}}</h2></a>{% endset %}
+		  	{% set sidebar_gallery = article.get_field('sidebar-gallery') %}
+		  	{% set hasgallery = sidebar_gallery + 0 > 0  %}
+        {% set fimg = false %}
+				{% if hasgallery %}
+					{% set gpost = TimberPost(sidebar_gallery) %}
+					{% if gpost %}
+					  {% set gallery = gpost.get_field('cp_gallery') %}
+					  {% set thumb_id =  gallery|first['thumb']|first + 0 %}
+					  {% set image_id =  gallery|first['image']|first + 0 %}
+					  {% set image_id = thumb_id > 0 ? thumb_id : image_id %}
+					  {% set fimg = TimberImage(image_id) %}
+					{% endif %}
+				{% endif %}
+		  {# **************** if has gallery then lets get first image to use in index. #}
+		    <li>
+					<article class="article {{class}}" itemscope itemtype="http://schema.org/Article">
+					  <meta itemprop="author" content="{{ article.author }}" />
+					  <div class="" style="position:relative;overflow:hidden;" >
+							{% if hasgallery %}
+							<div class="{% if fimg %}has-feature-image{% endif %}" {% if fimg %}data-background="{{fimg.src}}" {% endif %}></div>
+							{% endif %}
+					    <div class="article-body-wrapper {% if fimg %}with-feature-image{% endif %}" >
+								{% if article.get_field('_wpmem_block') == 1 %}
+								<div style="text-transform:uppercase;font-size:1.2em;line-height:1.1em;color: #f74a4a;padding-bottom: 6px;">VIP Club Exclusive</div>
+								{% endif %}
+								<a href="{{ article.link }}" title="{{ article.title | escape }}" itemprop="url">
+					        <h2 class="article-title" itemscope="name">{{article.title}}</h2>
+					      </a>
+					      <div  itemprop="articleBody" class="article-body">
+									{% filter shortcodes %}
+									{{article.get_field('fg-summary')|striptags| truncate(35) }}
+									<div style="padding-top: 12px;"><a href="{{article.link}}" class="btn btn-primary" >View Special</a></div>
+									{% endfilter %}
+								</div>
+					    </div>
+					  </div>
+					</article>
+				</li>
+		  {% endif %}
+		{% endfor %}
+		</ul>
+	</div>
+	[wpmem_logged_in]
+	<div class="col-sm-4 col-md-3">
+		<div id="special-vip-sidebar">
+			<a href="{{site.url}}"><img  style="max-width:180px; width: 100%" src="{{site.url}}/wp-content/uploads/2017/05/logo-villa-del-mar-300px.png" alt="[IMG Logo]"/></a>
+			<h2 style="padding-top:0; font-weight: bold">Vip Club</h2>
+			<a href="{{function('get_permalink','3400')}}" class="btn btn-primary">Account</a>
+			<a href="{{function('get_post_type_archive_link','special')}}?a=logout" class="btn btn-primary">Logout</a>
+		</div>
+	</div>
+	[/wpmem_logged_in]
+</div>
+
+{# **************** pagination #}
+{% include 'pagination.twig' %}
+{% endfilter %}
+{% endset %}
+
+{# **************** calling generic base template #}
+{% include 'base-page.twig' with {
+	page_class_content : 'col-sm-12',
+	page_content : content
+	}
+%}
+{% endblock %}

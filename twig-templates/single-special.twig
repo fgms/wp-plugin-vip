@@ -1,0 +1,118 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+{#**************  Setting Gallery and intro text #}
+{% set header %}
+  {% if post.get_field('_wpmem_block') == 1 %}
+  <div style="text-transform:uppercase;font-size:1.2em;line-height:1.1em;color: #f74a4a;padding-bottom: 6px;">VIP Club Exclusive</div>
+  {% endif %}
+  <h1 class="article-title " itemscope="name">{% if post.get_field('_fgms_html_title_meta') %}{{post.get_field('_fgms_html_title_meta')}}{% else %}{{ post.title }}{% endif %}</h1>
+{% endset %}
+
+{% set content_pre %}
+
+  {% if post.get_field('fg-subtitle') %}<div class="h3 special-subtitle">{{post.get_field('fg-subtitle')}}</div>{% endif %}
+  {% set sidebar_gallery = post.get_field('sidebar-gallery') %}
+  {% set hasgallery = sidebar_gallery + 0 > 0  %}
+
+    <div {% if hasgallery %}class="has-sidebar"{% endif %}>
+
+        {% if post.get_field('intro-text') %}<div class="intro-text ">{{post.get_field('intro-text')}}</div>{% endif %}
+        <div style="margin: 15px 0;">
+          <table class="table table-condensed">
+            <tbody>
+              {% if post.get_field('fg-booking-start-date') and post.get_field('fg-booking-end-date') %}
+              <tr>
+                <td style="border-top: 0; width: 30%; padding:6px 6px 6px 0;">Booking Window:</td>
+                <td style="border-top: 0;padding: 6px;"><strong>{{post.get_field('fg-booking-start-date')}} - {{post.get_field('fg-booking-end-date')}}</strong></td>
+              </tr>
+              {% endif %}
+              {% if post.get_field('fg-start-date') and post.get_field('fg-end-date') %}
+              <tr>
+                <td style="border-top: 0; padding:6px 6px 6px 0;">Stay Window:</td>
+                <td style="border-top: 0;padding: 6px;"><strong>{{post.get_field('fg-start-date')}} - {{post.get_field('fg-end-date')}}</strong></td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+    </div>
+
+	{% if hasgallery %}
+	<div class="page-sidebar-with-sidebar-gallery">
+	  {% filter shortcodes %}[page_gallery id="{{sidebar_gallery}}" filters="false" feature="true" ]{% endfilter %}
+	</div>
+	{% endif %}
+{% endset %}
+{#**************  Setting booking button #}
+{% set content_post %}
+
+
+
+{% endset %}
+
+{% set articleContent %}
+  {{post.get_field('fg-summary')}}
+  {% if post.get_field('fg-booking-url') %}
+  <div class="special-cta">
+    <h3>Book Today</h3>
+    <p>You can check rates and availability in real time as well as book online using the button below:</p>
+    <div class="booking-url"><a href="{{post.get_field('fg-booking-url')}}" target="_blank" class="btn btn-primary">Book Online</a></div>
+    <p>Or <a href="{{function('get_permalink',290)}}" >contact</a> us direct and our reservations desk can arrange your booking for you.</p>
+  </div>
+
+  {% endif %}
+
+  {% if post.get_field('fg-booking-code') %}
+  <div class="booking-code">Use the promotion code <strong>{{post.get_field('fg-booking-code')}}</strong></div>
+  {% endif %}
+
+  {% if post.get_field('fg-terms') %}
+  <div class="booking-terms">{{post.get_field('fg-terms')}}</div>
+
+  {% endif %}
+  <style>
+    .type-special .booking-url{ margin: 24px 0 30px;}
+    .special-cta {
+      padding-top: 30px; margin-top: 30px; border-top: 1px dotted #ccc;
+    }
+    .special-cta h3 {
+      padding-top: 0;
+    }
+
+    @media screen and (min-width: 993px){
+      .page-with-sidebar-gallery .page-sidebar-with-sidebar-gallery { top: 40px; }
+    }
+    .booking-terms {
+      padding-top: 30px;
+      margin-top: 30px;
+      border-top: 1px dotted #ccc;
+      font-size: 0.9em;
+      font-style: italic;
+    }
+
+  </style>
+{% endset %}
+{#**************  Setting Content #}
+
+{% set content %}
+
+	{% include "article/article-content.twig" with {
+		article : post,
+    header : header,
+    title : ' ',
+    articleContent : articleContent ,
+		content_pre : content_pre,
+    content_post : content_post,
+		class_main : hasgallery ? 'page-main-with-sidebar-gallery' :'',
+		class : "page-with-sidebar-gallery"
+		} only %}
+{% endset %}
+
+{#**************  Calling base-page #}
+{% include 'base-page.twig' with {
+	page_class_content : 'col-sm-12',
+	page_content : content,
+	}
+%}
+{% endblock %}

@@ -28,3 +28,35 @@
 ## shortcodes
 
 ### [vip_specials_active]
+
+| Attribute | Description |
+| --------- | ----------- |
+| singular  | a string sentence in singular form using %d in string to indicate number of exclusive specials |
+| plural    | a string sentence in plural form using %d in string to indicate number of exclusive offers |
+| zero      | a string sentence if there are zero offers |
+
+#### Usage on Vip Page
+
+```
+[vip_specials_active singular="is currently %d exclusive special" plural="are currently %d exclusive specials" zero=" "]<div class="highlight-text"><p>Special offers range from discounted accommodations, on-property dining and spa services to unique members-only packages.  <strong>There  %s available to VIP Club members</strong>.  Login to view or <a href="[twig]{{function('get_permalink',2)}}[/twig]" >sign up today.</a> It's free!  </p></div>[/specials_active]
+<div class="login-form">[wpmem_form login]</div>
+```
+
+## Tree
+```
+├── composer.json - for composer
+├── docs - docs
+│   ├── vip-club-setup.md
+│   └── wp-members-setup.md
+├── parts
+│   └── settings
+│       └── vip-settings.php - Piklist setting to give menu Settings -> VIP Club
+├── README.md - this files
+├── shortcodes
+│   └── vip-specials-active.php - allows singular, plural and zero sentence for exclusive offers
+├── twig-templates
+│   ├── archive-special.twig - overrides specials template index
+│   └── single-special.twig - overrides special archive template
+└── wp-plugin-vip.php
+
+```
